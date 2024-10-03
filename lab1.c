@@ -1,0 +1,1 @@
+testtest__HAVE_SPECULATION_SAFE_VALUEok 
