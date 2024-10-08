@@ -23,6 +23,12 @@
 
 #define adminpass 1234
 
+#define MAX_BEANS 100
+#define MAX_WATER 500
+#define MAX_MILK 300
+#define MAX_SYRUP 100
+
+
 int beans = 100;
 int water = 500;
 int milk = 300;
@@ -33,6 +39,10 @@ double total_amount = 0;
 void order_coffee();
 void admin_mode();
 void exit_program();
+void replenish_ingredients();
+void manual_replenish();
+void check_ing();
+
 
 int main() {
     char command;
@@ -185,6 +195,37 @@ void admin_mode() {
 
         }
     }
+}
+
+void replenish_ingredients() {
+    beans = MAX_BEANS;
+    water = MAX_WATER;
+    milk = MAX_MILK;
+    syrup = MAX_SYRUP;
+    printf("Ingredients have been replenished to maximum levels.\n");
+}
+
+void manual_replenish() {
+    printf("Enter the new values separated by spaces:\n1) New beans\n2) New water\n3) New milk\n4) New syrup\n");
+    
+    int newbeans, newwater, newmilk, newsyrup;
+    
+    scanf("%d %d %d %d", &newbeans, &newwater, &newmilk, &newsyrup);
+    
+    beans = newbeans;
+    water = newwater;
+    milk = newmilk;
+    syrup = newsyrup;
+    
+    printf("Ingredients have been replenished to the new levels:\n");
+    printf("Beans: %d grams\n", beans);
+    printf("Water: %d milliliters\n", water);
+    printf("Milk: %d milliliters\n", milk);
+    printf("Syrup: %d milliliters\n", syrup);
+}
+void check_ing(){
+printf("the current inventory has Beans: %d grams\n Water: %d milliliters\n Milk: %d milliliters\n Syrup: %d milliliters\n ", beans,water,milk,syrup )
+;
 }
 
 void exit_program() {
