@@ -146,27 +146,28 @@ void order_coffee() {
     }
   
 
-    double amount_paid = 0.0, coin;
-    printf(" insert coins (valid coins: 1 or 0.5 AED):\n");
+     double amount_paid = 0.0, coin,remainder;
 
-    while (amount_paid < price) {
-        scanf("%lf", &coin);
-        if (coin == 1.0 || coin == 0.5) {
-            amount_paid += coin;
-            printf("Inserted: %.2f AED. Total paid: %.2f AED.\n  ", coin, amount_paid);
+        printf("Insert coins (valid coins: 1 or 0.5 AED):\n");
 
-        } else {
-            printf("Invalid coin.  insert a valid coin.\n");
+        while (amount_paid < price) {
+            scanf("%lf", &coin);
+            if (coin == 1.0 || coin == 0.5) {
+                amount_paid += coin;
+                remainder = amount_paid-price;
+
+                printf("Inserted: %.2f AED. Total paid: %.2f AED.  \n", coin, amount_paid);
+            } else {
+                printf("Invalid coin. Please insert a valid coin.\n");
+            }
         }
-        
-    }
 
-  printf("enjoy your coffee"); 
+        printf("Change:%.2f \t\n Enjoy your coffee!\n",remainder);
+
 
 
 }
   
-
 
 void admin_mode() {
 
