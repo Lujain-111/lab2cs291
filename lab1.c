@@ -1,10 +1,9 @@
 
-// main libraries used 
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h> 
-// Constants for coffee ingredients and prices
 
 #define E_bean 8
 #define E_water 30
@@ -16,23 +15,24 @@
 #define M_milk 160
 #define M_Syrup 30
 
-// constant for low indicators 
+
 #define lowbean 10
 #define lowater 50
 #define lowmilk 100
 #define lowsyrup 20
-// prices   
 
-//admin password
+#define eprice 3.5
+#define cprice 4.5
+#define mprice 5.5
+
 #define adminpass 1234
-//max threshold
+
 #define MAX_BEANS 100
 #define MAX_WATER 500
 #define MAX_MILK 300
 #define MAX_SYRUP 100
 
 
-// variables stored (will be used and unpated through the code )
 int beans = 100;
 int water = 500;
 int milk = 300;
@@ -40,13 +40,9 @@ int syrup = 100;
 double total_amount = 0; 
 int espresso_sold = 0;      
 int cappuccino_sold = 0;     
-int mocha_sold = 0;  
-double eprice = 3.5;   
-double cprice = 4.5;   
-double mprice = 5.5; 
+int mocha_sold = 0;   
 
 
-// functions prototype
 void order_coffee();
 void admin_mode();
 void exit_program();
@@ -56,27 +52,26 @@ void check_ing();
 void change_price();
 void resets();
 
-// main function
+
 int main() {
-    char command; //var to hold user command 
-    while (1) { //infinit loop(only excutes while its true)
+    char command;
+    while (1) { 
         
-    printf(" choose what you want :\n1) Order a coffee\n2) Admin mode\n3) Exit program\n");// menue options 
+    printf(" choose what you want :\n1) Order a coffee\n2) Admin mode\n3) Exit program\n");
     scanf(" %c", &command); 
 
-    switch(command) {//switch cases to call for avaible  functions (options)
-
+    switch(command) {
         case '1':
-            order_coffee(); 
+            order_coffee();
             break;
         case '2':
             admin_mode();
             break;
         case '3':
             exit_program();
-            return 0;// terminates the program when chosen 
+            return 0;
         default:
-            printf("Invalid\n"); //prints when invalid option is typed 
+            printf("Invalid\n");
             break;
       }
     }
@@ -84,15 +79,13 @@ int main() {
 }
 
 
-//function when ordering coffee is called 
-void order_coffee() {
-    //variable to store choice 
-    int choice; 
-    double price = 0.0;// assigned data type for price(will be updated multiple times through the code )
-do {// do loop that will excute once to validate the inputs, then will continue running while true 
-    printf(" coffee types:\n");
-    if (beans >= E_bean && water >= E_water) { //if statement to  check if there is enough ingredients to make a coffee, if not it wont proceed  to the next step
 
+void order_coffee() {
+    int choice;
+    double price = 0.0;
+do {
+    printf(" coffee types:\n");
+    if (beans >= E_bean && water >= E_water) {
             printf("1) Espresso - %.2f AED\n", eprice);
     } else {
         printf("1) Espresso - Unavailable due to insufficient ingredients.\n");
@@ -112,11 +105,8 @@ do {// do loop that will excute once to validate the inputs, then will continue 
     printf("Please choose your coffee (0 to cancel): ");
     scanf("%d", &choice);
 
-// switch case to handle the selection IF THE  USER SELECTED A VALID OPTION, if choice is zero it will return the main loop, continue will trigger the same  loop again to ask for the selection again
 
-
-    switch(choice) { //switch statement  to handle the selection of coffee type inventory update, while checking for threshold values 
-
+    switch(choice) {
         case 1:
             if (beans >= E_bean && water >= E_water) {
                 price = eprice;
@@ -149,12 +139,11 @@ do {// do loop that will excute once to validate the inputs, then will continue 
                     water -= M_water;
                     milk -= M_milk;
                     syrup -= M_Syrup;
-                    mocha_sold++;//updates the sales per  type of coffee(later will be used in admin mode)
-
+                    mocha_sold++;
                 printf("You selected Mocha. Price: %.2f AED.\n", price);
             } else {
                 printf("Sorry, Mocha is unavailable.\n");
-                continue;
+                continue;;
             }
             break;
         case 0:
@@ -166,14 +155,15 @@ do {// do loop that will excute once to validate the inputs, then will continue 
     }
   
 
-         double amount_paid = 0.0, coin;
+         double amount_paid = 0.0, coin,remainder;
 
         printf("Insert coins (valid coins: 1 or 0.5 AED):\n");
-//while loop to collect the money payed if the amount reached it will break the loop, otherwise it runs until amount is right
+
         while (amount_paid < price) {
             scanf("%lf", &coin);
             if (coin == 1.0 || coin == 0.5) {
                 amount_paid += coin;
+                remainder = amount_paid-price;
 
                 printf("Inserted: %.2f AED. Total paid: %.2f AED.  \n", coin, amount_paid);
             } else {
@@ -181,8 +171,8 @@ do {// do loop that will excute once to validate the inputs, then will continue 
             }
         }
 
-        printf("Enjoy your coffee!\n");
-         total_amount += price;// updates the total sales amount 
+        printf("Change:%.2f \t\n Enjoy your coffee!\n",remainder);
+         total_amount += price;
     char order_again;
         printf("\n Do you like to order another coffee? (y/n): ");
         scanf(" %c", &order_again);
@@ -191,16 +181,14 @@ do {// do loop that will excute once to validate the inputs, then will continue 
             return; 
         }
 
-} while(true);//only runs when the condition is not yet met , in this case it will run until the user chooses to exit the program
-
+} while(true);
 
 }
 
   
 
 void admin_mode() {
-    int pass;//initiaiting variable to store the amdin pass owrd
-
+    int pass;
     while (true) {
         printf("Enter the admin password: ");
         scanf("%d", &pass);
@@ -217,10 +205,9 @@ void admin_mode() {
                 printf("4)check total sales/reset\n");
                 printf("5) Exit Admin Mode\n");
                 scanf("%d", &choice);
-                switch (choice) {//multiple switch cases to handle diffrent selections , each selection would call  a different function from the prototype, which will then move to function definition down and excecute 
-
+                switch (choice) {
                    case 1:
-                          printf("1) Manual Replenish\n2) random replinish \n");
+                          printf("1) Manual Replenish\n2) Automatic MAXOUT\n");
                           scanf("%d", &choice2);
                           switch (choice2) {
                               case 1:
@@ -237,41 +224,42 @@ void admin_mode() {
                         
                     case 2:
                         
-                        check_ing();
-                        break; 
-                    case 3:
+                         check_ing();
+                        return; 
+                        case 3:
                         change_price();
+
                         break;
-                    case 4:
+                        case 4:
                         resets();
-                    case 5:
+                        case 5:
                        printf("Exiting Admin Mode...\n");
-                       return;
+                        break;
 
                     default:
                         printf("Invalid selection, try again.\n");
                 }
             }
         } else {
-            printf("Wrong password, try again.\n"); 
+            printf("Wrong password, try again.\n");
         }
     }
 }
 void replenish_ingredients() {
-   srand(time(NULL)); //random number generated 
-    beans = (rand() % (MAX_BEANS - lowbean + 1)) + lowbean;  // this would generate a value ranging from 0 to max, which will then be added to lowest value to ensure if the number was at zero then the range would be from lower thresh to max 
+    srand(time(NULL));
+    beans = (rand() % (MAX_BEANS - lowbean + 1)) + lowbean;  
     water = (rand() % (MAX_WATER - lowater + 1)) + lowater;  
     milk  = (rand() % (MAX_MILK - lowmilk + 1)) + lowmilk;  
     syrup = (rand() % (MAX_SYRUP - lowsyrup + 1)) + lowsyrup; 
-  
+
     printf("Ingredients have been replenished with random values:\n");
     printf("Beans: %d grams (Threshold: %d grams)\n", beans, lowbean);
-    printf("Water: %d mil (Threshold: %d mil)\n", water, lowater);
-    printf("Milk: %d mil (Threshold: %d mil)\n", milk, lowmilk);
-    printf("Syrup: %d mil (Threshold: %d mil)\n", syrup, lowsyrup);
+    printf("Water: %d milliliters (Threshold: %d milliliters)\n", water, lowater);
+    printf("Milk: %d milliliters (Threshold: %d milliliters)\n", milk, lowmilk);
+    printf("Syrup: %d milliliters (Threshold: %d milliliters)\n", syrup, lowsyrup);
 }
 
-void manual_replenish() { //manually inputting the ingrediants values 
+void manual_replenish() {
     printf("Enter the new values separated by spaces:\n1) New beans\n2) New water\n3) New milk\n4) New syrup\n");
     
     int newbeans, newwater, newmilk, newsyrup;
@@ -289,31 +277,54 @@ void manual_replenish() { //manually inputting the ingrediants values
     printf("Milk: %d ml\n", milk);
     printf("Syrup: %d mil\n", syrup);
 }
-void check_ing(){ //void loop to only display current inventory (was updated throughout the code )
-printf("the current inventory has Beans: %d grams\n Water: %d mil\n Milk: %d mil\n Syrup: %d mil\n ", beans,water,milk,syrup )
+void check_ing(){
+printf("the current inventory has Beans: %d grams\n Water: %d milliliters\n Milk: %d milliliters\n Syrup: %d milliliters\n ", beans,water,milk,syrup )
 ;
 }
 
-void change_price() {  //change the price of the drink
+void change_price() {
+    int choice;
+    double new_price;
 
-    printf("Current Espresso price: %.2f AED\n", eprice);
-    printf("Enter new price for Espresso: ");
-    scanf("%lf", &eprice);
+    printf("Which coffee price would you like to change?\n");
+    printf("1) Espresso\n");
+    printf("2) Cappuccino\n");
+    printf("3) Mocha\n");
+    printf("0) Cancel\n");
+    printf("Please enter your choice: ");
+    scanf("%d", &choice);
 
-    
-    printf("Current Cappuccino price: %.2f AED\n", cprice);
-    printf("Enter new price for Cappuccino: ");
-    scanf("%lf", &cprice);
-    
-    printf("Current Mocha price: %.2f AED\n", mprice);
-    printf("Enter new price for Mocha: ");
-    scanf("%lf", &mprice);
-    
-    printf("Prices updated successfully.\n");
+    switch (choice) {
+        case 1:
+            printf("Enter new price for Espresso: ");
+            scanf("%lf", &new_price);
+             new_price=eprice;  
+            printf("Espresso price updated to %.2f AED.\n", eprice);
+            break;
+        case 2:
+            printf("Enter new price for Cappuccino: ");
+            scanf("%lf", &new_price);
+             new_price=cprice ;  
+            printf("Cappuccino price updated to %.2f AED.\n", cprice);
+            break;
+        case 3:
+            printf("Enter new price for Mocha: ");
+            scanf("%lf", &new_price);
+            new_price= mprice ;  
+            printf("Mocha price updated to %.2f AED.\n", mprice);
+            break;
+        case 0:
+            printf("Price change cancelled.\n");
+            break;
+        default:
+            printf("Invalid selection, please try again.\n");
+            break;
+    }
+
 
 }
 
-void resets(){// loop to reset the session if needed, while checking for current sales amount
+void resets(){
  printf("Total sales for this session: %.2f AED\n", total_amount);
     printf("Espresso sold: %d\n", espresso_sold);
     printf("Cappuccino sold: %d\n", cappuccino_sold);
@@ -325,7 +336,7 @@ void resets(){// loop to reset the session if needed, while checking for current
     scanf(" %c", &reset_choice);
 
    
-    if (reset_choice == 'y' || reset_choice == 'Y') { // condition to reset with checking if choice was in capital or lower 
+    if (reset_choice == 'y' || reset_choice == 'Y') {
         total_amount = 0;           
         espresso_sold = 0;           
         cappuccino_sold = 0;         
@@ -338,3 +349,4 @@ void exit_program() {
     printf(" Goodbye!\n");
     
 }
+//remove the milliletrs ,,,rand remove teh refund option 
