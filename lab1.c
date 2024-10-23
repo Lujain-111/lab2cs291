@@ -335,6 +335,6 @@ void resets(){// loop to reset the session if needed, while checking for current
 }
 }
 void exit_program() {
-    printf(" Goodbye!\n");
+    printf(" bye!\n");
     
 }
