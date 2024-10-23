@@ -1,6 +1,9 @@
 
+
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h> 
 
 #define E_bean 8
 #define E_water 30
@@ -11,6 +14,7 @@
 #define M_water 39
 #define M_milk 160
 #define M_Syrup 30
+
 
 #define lowbean 10
 #define lowater 50
@@ -34,6 +38,9 @@ int water = 500;
 int milk = 300;
 int syrup = 100;
 double total_amount = 0; 
+int espresso_sold = 0;      
+int cappuccino_sold = 0;     
+int mocha_sold = 0;   
 
 
 void order_coffee();
@@ -42,6 +49,8 @@ void exit_program();
 void replenish_ingredients();
 void manual_replenish();
 void check_ing();
+void change_price();
+void resets();
 
 
 int main() {
@@ -103,6 +112,7 @@ do {
                 price = eprice;
                     beans -= E_bean;
                     water -= E_water;
+                    espresso_sold++;
                 printf("You selected Espresso. Price: %.2f AED.\n", price);
             } else {
                 printf("Sorry, Espresso is unavailable.\n");
@@ -115,6 +125,7 @@ do {
                     beans -= C_beans;
                     water -= C_water;
                     milk -= C_milk;
+                    cappuccino_sold++;
                 printf("You selected Cappuccino. Price: %.2f AED.\n", price);
             } else {
                 printf(" Cappuccino is unavailable.\n");
@@ -128,10 +139,11 @@ do {
                     water -= M_water;
                     milk -= M_milk;
                     syrup -= M_Syrup;
+                    mocha_sold++;
                 printf("You selected Mocha. Price: %.2f AED.\n", price);
             } else {
                 printf("Sorry, Mocha is unavailable.\n");
-                continue;;
+                continue;
             }
             break;
         case 0:
@@ -160,6 +172,7 @@ do {
         }
 
         printf("Change:%.2f \t\n Enjoy your coffee!\n",remainder);
+         total_amount += price;
     char order_again;
         printf("\n Do you like to order another coffee? (y/n): ");
         scanf(" %c", &order_again);
@@ -171,6 +184,7 @@ do {
 } while(true);
 
 }
+
   
 
 void admin_mode() {
@@ -187,7 +201,9 @@ void admin_mode() {
                 printf("1) Replenish ingredients\n");
                 
                 printf("2) Check current inventory\n");
-                printf("3) Exit Admin Mode\n");
+                printf("3)change prices\n");
+                printf("4)check total sales/reset\n");
+                printf("5) Exit Admin Mode\n");
                 scanf("%d", &choice);
                 switch (choice) {
                    case 1:
@@ -208,11 +224,19 @@ void admin_mode() {
                         
                     case 2:
                         
-                         check_ing();
-                        return; 
-                        case 3:
-                       printf("Exiting Admin Mode...\n");
+                        check_ing();
+                        break; 
+                    case 3:
+                        change_price();
                         break;
+                    case 4:
+                        resets();
+                    case 5:
+                       printf("Exiting Admin Mode...\n");
+                       return;
+                      
+                     
+
                     default:
                         printf("Invalid selection, try again.\n");
                 }
@@ -223,11 +247,17 @@ void admin_mode() {
     }
 }
 void replenish_ingredients() {
-    beans = MAX_BEANS;
-    water = MAX_WATER;
-    milk = MAX_MILK;
-    syrup = MAX_SYRUP;
-    printf("Ingredients have been replenished to maximum levels.\n");
+    srand(time(NULL));
+    beans = (rand() % (MAX_BEANS - lowbean + 1)) + lowbean;  
+    water = (rand() % (MAX_WATER - lowater + 1)) + lowater;  
+    milk  = (rand() % (MAX_MILK - lowmilk + 1)) + lowmilk;  
+    syrup = (rand() % (MAX_SYRUP - lowsyrup + 1)) + lowsyrup; 
+
+    printf("Ingredients have been replenished with random values:\n");
+    printf("Beans: %d grams (Threshold: %d grams)\n", beans, lowbean);
+    printf("Water: %d mil (Threshold: %d mil)\n", water, lowater);
+    printf("Milk: %d mil (Threshold: %d mil)\n", milk, lowmilk);
+    printf("Syrup: %d mil (Threshold: %d mil)\n", syrup, lowsyrup);
 }
 
 void manual_replenish() {
@@ -253,8 +283,70 @@ printf("the current inventory has Beans: %d grams\n Water: %d milliliters\n Milk
 ;
 }
 
+void change_price() {
+    int choice;
+    double new_price;
+
+    printf("Which coffee price would you like to change?\n");
+    printf("1) Espresso\n");
+    printf("2) Cappuccino\n");
+    printf("3) Mocha\n");
+    printf("0) Cancel\n");
+    printf("Please enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            printf("Enter new price for Espresso: ");
+            scanf("%lf", &new_price);
+             new_price=eprice;  
+            printf("Espresso price updated to %.2f AED.\n", eprice);
+            break;
+        case 2:
+            printf("Enter new price for Cappuccino: ");
+            scanf("%lf", &new_price);
+             new_price=cprice ;  
+            printf("Cappuccino price updated to %.2f AED.\n", cprice);
+            break;
+        case 3:
+            printf("Enter new price for Mocha: ");
+            scanf("%lf", &new_price);
+            new_price= mprice ;  
+            printf("Mocha price updated to %.2f AED.\n", mprice);
+            break;
+        case 0:
+            printf("Price change cancelled.\n");
+            break;
+        default:
+            printf("Invalid selection, please try again.\n");
+            break;
+    }
+
+
+}
+
+void resets(){
+ printf("Total sales for this session: %.2f AED\n", total_amount);
+    printf("Espresso sold: %d\n", espresso_sold);
+    printf("Cappuccino sold: %d\n", cappuccino_sold);
+    printf("Mocha sold: %d\n", mocha_sold);
+
+  
+    char reset_choice;
+    printf("Do you want to reset total sales and quantities sold to zero? (y/n): ");
+    scanf(" %c", &reset_choice);
+
+   
+    if (reset_choice == 'y' || reset_choice == 'Y') {
+        total_amount = 0;           
+        espresso_sold = 0;           
+        cappuccino_sold = 0;         
+        mocha_sold = 0;             
+        printf("Total sales and quantities sold have been reset to 0.\n");
+    
+}
+}
 void exit_program() {
     printf(" Goodbye!\n");
     
 }
-
